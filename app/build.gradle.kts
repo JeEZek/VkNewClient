@@ -5,12 +5,12 @@ plugins {
 
 android {
     namespace = "com.example.vknewclient"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.example.vknewclient"
         minSdk = 24
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -61,6 +61,8 @@ dependencies {
     implementation("androidx.compose.material3:material3:1.1.2")
     
     implementation("androidx.compose.runtime:runtime-livedata:1.2.1")
+    implementation("androidx.navigation:navigation-compose:2.7.4")
+    implementation("androidx.navigation:navigation-runtime-ktx:2.7.4")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
