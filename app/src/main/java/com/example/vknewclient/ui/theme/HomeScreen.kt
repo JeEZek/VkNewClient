@@ -2,72 +2,51 @@ package com.example.vknewclient.ui.theme
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.DismissDirection
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SwipeToDismiss
-import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDismissState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.example.vknewclient.MainViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.vknewclient.NewsFeedViewModel
 import com.example.vknewclient.domain.FeedPost
-import com.example.vknewclient.domain.PostComment
 
 @Composable
 fun HomeScreen(
-    viewModel: MainViewModel,
-    paddingValues: PaddingValues
+    paddingValues: PaddingValues,
+    onCommentClickListener: () -> Unit
 ) {
-    val screenState = viewModel.screenState.observeAsState(HomeScreenState.Initial)
+    val viewModel: NewsFeedViewModel = viewModel()
+    val screenState = viewModel.screenState.observeAsState(NewsFeedScreenState.Initial)
 
     when(val currentState = screenState.value) {
-        is HomeScreenState.Posts -> {
+        is NewsFeedScreenState.Posts -> {
             FeedPost(
                 viewModel = viewModel,
                 paddingValues = paddingValues,
-                posts = currentState.posts
+                posts = currentState.posts,
+                onCommentClickListener = onCommentClickListener
             )
         }
-        is HomeScreenState.Comments -> {
-            CommentsScreen(
-                feedPost = currentState.feedPost,
-                comments = currentState.comments,
-                onBackPressed = {
-                    viewModel.closeComments()
-                }
-            )
-            BackHandler {
-                viewModel.closeComments()
-            }
-        }
-        HomeScreenState.Initial -> {}
+        NewsFeedScreenState.Initial -> {}
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 private fun FeedPost(
-    viewModel: MainViewModel,
+    viewModel: NewsFeedViewModel,
     paddingValues: PaddingValues,
-    posts: List<FeedPost>
+    posts: List<FeedPost>,
+    onCommentClickListener: () -> Unit
 ) {
     LazyColumn(
         modifier = androidx.compose.ui.Modifier.padding(paddingValues),
@@ -103,7 +82,7 @@ private fun FeedPost(
                             viewModel.updateCount(feedPost, statisticItem)
                         },
                         onCommentClickListener = {
-                            viewModel.showComments(feedPost)
+                            onCommentClickListener()
                         },
                         onLikeClickListener = { statisticItem ->
                             viewModel.updateCount(feedPost, statisticItem)

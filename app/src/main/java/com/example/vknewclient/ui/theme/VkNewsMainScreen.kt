@@ -15,12 +15,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.example.vknewclient.MainViewModel
+import com.example.vknewclient.NewsFeedViewModel
 import com.example.vknewclient.navigation.AppNavGraph
 import com.example.vknewclient.navigation.rememberNavigationState
 
 @Composable
-fun MainScreen(viewModel: MainViewModel) {
+fun MainScreen() {
     val navigationState = rememberNavigationState()
 
     Scaffold(
@@ -49,8 +49,11 @@ fun MainScreen(viewModel: MainViewModel) {
             navHostController = navigationState.navHostController,
             homeScreenContent = {
                 HomeScreen(
-                    viewModel = viewModel,
-                    paddingValues = paddingValues
+                    paddingValues = paddingValues,
+                    onCommentClickListener = {
+                        //TODO
+
+                    }
                 )
             },
             favouriteScreenContent = { TextCounter(name = "Favourite") },
