@@ -28,10 +28,6 @@ import com.example.vknewclient.navigation.rememberNavigationState
 fun MainScreen() {
     val navigationState = rememberNavigationState()
 
-    val commentsToPost: MutableState<FeedPost?> = remember {
-        mutableStateOf(null)
-    }
-
     Scaffold(
         bottomBar = {
             BottomAppBar {
@@ -64,22 +60,22 @@ fun MainScreen() {
             newsFeedScreenContent = {
                 HomeScreen(
                     paddingValues = paddingValues,
-                    onCommentClickListener = {
-                        commentsToPost.value = it
-                        navigationState.navigateToComments()
+                    onCommentClickListener = { feedPost ->
+                        navigationState.navigateToComments(feedPost)
                     }
                 )
             },
-            commentsScreenContent = {
+            commentsScreenContent = { feedPost ->
                 CommentsScreen(
                     onBackPressed = {
                         navigationState.navHostController.popBackStack()
                     },
-                    feedPost = commentsToPost.value!!
+                    feedPost = feedPost
                 )
             },
             favouriteScreenContent = { TextCounter(name = "Favourite") },
-            profileScreenContent = { TextCounter(name = "Profile") })
+            profileScreenContent = { TextCounter(name = "Profile") }
+        )
     }
 }
 
