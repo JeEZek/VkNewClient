@@ -13,6 +13,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "VkNewClient"
+rootProject.name = "VkNewsClient"
 include(":app")
- 
