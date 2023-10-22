@@ -1,4 +1,4 @@
-package com.example.vknewsclient.ui.theme
+package com.example.vknewsclient.presentation.main
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Favorite
@@ -26,7 +26,7 @@ sealed class NavigationItem(
         icon = Icons.Outlined.Favorite
     )
 
-    object Profile : NavigationItem (
+    object Profile : NavigationItem(
         screen = Screen.Profile,
         titleResId = R.string.navigation_item_profile,
         icon = Icons.Outlined.Person
