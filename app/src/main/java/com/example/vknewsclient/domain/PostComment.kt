@@ -1,6 +1,6 @@
 package com.example.vknewsclient.domain
 
-import com.example.vknewclient.R
+import com.example.vknewsclient.R
 
 data class PostComment(
     val id: Int,

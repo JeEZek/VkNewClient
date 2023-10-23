@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.vknewsclient.domain.FeedPost
 import com.example.vknewsclient.domain.PostComment
-import com.example.vknewsclient.ui.theme.VkNewClientTheme
+import com.example.vknewsclient.ui.theme.VkNewsClientTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -122,7 +122,7 @@ fun CommentItem(
 @Preview
 @Composable
 private fun PreviewComment() {
-    VkNewClientTheme(darkTheme = false) {
+    VkNewsClientTheme(darkTheme = false) {
         CommentItem(comment = PostComment(id = 0))
     }
 }

@@ -17,7 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.example.vknewclient.R
+import com.example.vknewsclient.R
 
 @Composable
 fun LoginScreen(
@@ -28,7 +28,9 @@ fun LoginScreen(
         contentAlignment = Alignment.Center
     ) {
         Column(
-            modifier = Modifier.wrapContentHeight()
+            modifier = Modifier.wrapContentHeight(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
                 modifier = Modifier.size(100.dp),
