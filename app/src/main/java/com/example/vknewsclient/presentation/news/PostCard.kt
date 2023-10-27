@@ -18,7 +18,6 @@ import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -69,7 +68,7 @@ fun PostCard(
                 onShareClickListener = onShareClickListener,
                 onCommentClickListener = onCommentClickListener,
                 onLikeClickListener = onLikeClickListener,
-                isFavourite = feedPost.isFavourite
+                isFavourite = feedPost.isLiked
             )
         }
     }
@@ -140,14 +139,14 @@ fun Statistics(
             val commentsItem = statistics.getItemByType(StatisticType.COMMENTS)
             IconWithText(
                 iconResId = R.drawable.ic_comment,
-                text = formatStatisticCount(sharesItem.count),
+                text = formatStatisticCount(commentsItem.count),
                 onItemClickListener = {
                     onCommentClickListener(commentsItem)
                 })
             val likesItem = statistics.getItemByType(StatisticType.LIKES)
             IconWithText(
                 iconResId = if (isFavourite) R.drawable.ic_like_set else R.drawable.ic_like,
-                text = formatStatisticCount(sharesItem.count),
+                text = formatStatisticCount(likesItem.count),
                 onItemClickListener = {
                     onLikeClickListener(likesItem)
                 },
