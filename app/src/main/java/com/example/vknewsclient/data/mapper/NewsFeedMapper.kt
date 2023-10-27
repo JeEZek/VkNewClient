@@ -22,6 +22,7 @@ class NewsFeedMapper {
             val group = groups.find { it.id == post.communityId.absoluteValue } ?: continue
             val feedPost = FeedPost(
                 id = post.id,
+                communityId = post.communityId,
                 communityName = group.name,
                 publicationDate = mapTimestampToDate(post.date * 1000),
                 communityImageUrl = group.imageUrl,
@@ -33,7 +34,7 @@ class NewsFeedMapper {
                     StatisticItem(type = StatisticType.COMMENTS, count = post.comments.count),
                     StatisticItem(type = StatisticType.LIKES, count = post.likes.count)
                 ),
-                isFavourite = post.isFavourite
+                isLiked = post.likes.userLikes > 0
             )
             result.add(feedPost)
         }
