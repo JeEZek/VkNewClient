@@ -65,19 +65,12 @@ class NewsFeedRepository(application: Application) {
         _feedPosts[postIndex] = newPost
     }
 
-    suspend fun deleteLike(feedPost: FeedPost) {
-        val response = apiService.deleteLike(
+    suspend fun deletePost(feedPost: FeedPost) {
+        apiService.ignorePost(
             token = getAccessToken(),
             ownerId = feedPost.communityId,
             postId = feedPost.id
         )
-        val newLikesCount = response.likes.count
-        val newStatisticItem = feedPost.statistics.toMutableList().apply {
-            removeIf { it.type == StatisticType.LIKES }
-            add(StatisticItem(type = StatisticType.LIKES, count = newLikesCount))
-        }
-        val newPost = feedPost.copy(statistics = newStatisticItem, isLiked = false)
-        val postIndex = _feedPosts.indexOf(feedPost)
-        _feedPosts[postIndex] = newPost
+        _feedPosts.remove(feedPost)
     }
 }
