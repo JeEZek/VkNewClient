@@ -18,8 +18,7 @@ class NewsFeedMapper {
         val groups = responseDto.newsFeedContent.groups
 
         for (post in posts) {
-            //TODO fix bug with break. Cant find group id
-            val group = groups.find { it.id == post.communityId.absoluteValue } ?: continue
+            val group = groups.find { it.id == post.communityId.absoluteValue } ?: break
             val feedPost = FeedPost(
                 id = post.id,
                 communityId = post.communityId,
