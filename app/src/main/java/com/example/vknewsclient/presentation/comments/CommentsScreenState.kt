@@ -7,7 +7,7 @@ sealed class CommentsScreenState {
 
     object Initial : CommentsScreenState()
 
-    //TODO loading after comments
+    object Loading: CommentsScreenState()
 
     data class Comments(
         val feedPost: FeedPost,
