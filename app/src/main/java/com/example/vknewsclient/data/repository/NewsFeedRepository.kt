@@ -1,8 +1,10 @@
 package com.example.vknewsclient.data.repository
 
 import android.app.Application
+import android.util.Log
 import com.example.vknewsclient.data.mapper.NewsFeedMapper
 import com.example.vknewsclient.data.network.ApiFactory
+import com.example.vknewsclient.domain.AuthState
 import com.example.vknewsclient.domain.FeedPost
 import com.example.vknewsclient.domain.PostComment
 import com.example.vknewsclient.domain.StatisticItem
@@ -17,16 +19,15 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.retry
 import kotlinx.coroutines.flow.stateIn
 
 class NewsFeedRepository(application: Application) {
 
     private val storage = VKPreferencesKeyValueStorage(application)
-    private val token = VKAccessToken.restore(storage)
+    private val token
+        get() = VKAccessToken.restore(storage)
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private val nextDataNeededEvents = MutableSharedFlow<Unit>(replay = 1)
@@ -63,6 +64,21 @@ class NewsFeedRepository(application: Application) {
 
     private var nextFrom: String? = null
 
+    private val checkAuthStateEvents = MutableSharedFlow<Unit>(replay = 1)
+
+    val authStateFlow = flow {
+        checkAuthStateEvents.emit(Unit)
+        checkAuthStateEvents.collect {
+            val currentToken = token
+            val isLogged = currentToken != null && currentToken.isValid
+            if (isLogged) emit(AuthState.Authorized) else emit(AuthState.NotAuthorized)
+        }
+    }.stateIn(
+        scope = coroutineScope,
+        started = SharingStarted.Lazily,
+        initialValue = AuthState.Initial
+    )
+
     val recommendations: StateFlow<List<FeedPost>> = loadedListFlow
         .mergeWith(refreshedListFlow)
         .stateIn(
@@ -73,6 +89,10 @@ class NewsFeedRepository(application: Application) {
 
     suspend fun loadNextData() {
         nextDataNeededEvents.emit(Unit)
+    }
+
+    suspend fun checkAuthState() {
+        checkAuthStateEvents.emit(Unit)
     }
 
     suspend fun changeLikeStatus(feedPost: FeedPost) {
