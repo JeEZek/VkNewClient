@@ -1,9 +1,6 @@
 package com.example.vknewsclient.presentation.comments
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
-import com.example.vknewsclient.data.repository.NewsFeedRepositoryImpl
 import com.example.vknewsclient.domain.entity.FeedPost
 import com.example.vknewsclient.domain.usecases.GetCommentsUseCase
 import kotlinx.coroutines.flow.map

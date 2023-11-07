@@ -1,4 +1,4 @@
-package com.example.vknewsclient.data.model
+package com.example.vknewsclient.data.model.likes
 
 import com.google.gson.annotations.SerializedName
 
