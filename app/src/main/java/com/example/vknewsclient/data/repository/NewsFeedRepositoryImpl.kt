@@ -1,12 +1,12 @@
 package com.example.vknewsclient.data.repository
 
-import android.app.Application
+import android.util.Log
 import com.example.vknewsclient.data.mapper.NewsFeedMapper
-import com.example.vknewsclient.data.network.ApiFactory
 import com.example.vknewsclient.data.network.ApiService
 import com.example.vknewsclient.domain.entity.AuthState
 import com.example.vknewsclient.domain.entity.FeedPost
 import com.example.vknewsclient.domain.entity.PostComment
+import com.example.vknewsclient.domain.entity.Profile
 import com.example.vknewsclient.domain.entity.StatisticItem
 import com.example.vknewsclient.domain.entity.StatisticType
 import com.example.vknewsclient.domain.repository.NewsFeedRepository
@@ -16,6 +16,7 @@ import com.vk.api.sdk.auth.VKAccessToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -139,7 +140,7 @@ class NewsFeedRepositoryImpl @Inject constructor(
         return recommendations
     }
 
-    override fun getComments(feedPost: FeedPost): StateFlow<List<PostComment>> = flow {
+    override fun getComments(feedPost: FeedPost): Flow<List<PostComment>> = flow {
         //TODO loading comments after end
         val response = apiService.getComments(
             token = getAccessToken(),
@@ -150,11 +151,15 @@ class NewsFeedRepositoryImpl @Inject constructor(
     }.retry {
         delay(RETRY_TIMEOUT_MILLIS)
         true
-    }.stateIn(
-        scope = coroutineScope,
-        started = SharingStarted.Lazily,
-        initialValue = listOf()
-    )
+    }
+
+    override fun getProfileInfo(): Flow<Profile> = flow {
+        val response = apiService.getProfileInfo(token = getAccessToken())
+        emit(mapper.mapResponseToProfile(response))
+    }.retry {
+        delay(RETRY_TIMEOUT_MILLIS)
+        true
+    }
 
     private fun getAccessToken(): String {
         return token?.accessToken ?: throw IllegalStateException("Token is null")

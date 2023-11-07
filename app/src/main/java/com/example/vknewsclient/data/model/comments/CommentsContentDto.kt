@@ -1,5 +1,6 @@
-package com.example.vknewsclient.data.model
+package com.example.vknewsclient.data.model.comments
 
+import com.example.vknewsclient.data.model.news.CommentDto
 import com.google.gson.annotations.SerializedName
 
 data class CommentsContentDto(

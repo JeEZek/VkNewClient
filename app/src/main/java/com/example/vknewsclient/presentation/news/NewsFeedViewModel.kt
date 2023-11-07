@@ -1,11 +1,8 @@
 package com.example.vknewsclient.presentation.news
 
-import android.app.Application
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.vknewsclient.data.repository.NewsFeedRepositoryImpl
 import com.example.vknewsclient.domain.entity.FeedPost
 import com.example.vknewsclient.domain.usecases.ChangeLIkeStatusUseCase
 import com.example.vknewsclient.domain.usecases.DeletePostUseCase

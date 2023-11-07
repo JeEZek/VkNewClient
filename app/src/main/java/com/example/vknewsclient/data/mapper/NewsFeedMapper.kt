@@ -1,9 +1,11 @@
 package com.example.vknewsclient.data.mapper
 
-import com.example.vknewsclient.data.model.CommentsResponseDto
-import com.example.vknewsclient.data.model.NewsFeedResponseDto
+import com.example.vknewsclient.data.model.comments.CommentsResponseDto
+import com.example.vknewsclient.data.model.news.NewsFeedResponseDto
+import com.example.vknewsclient.data.model.profile.ProfileResponseDto
 import com.example.vknewsclient.domain.entity.FeedPost
 import com.example.vknewsclient.domain.entity.PostComment
+import com.example.vknewsclient.domain.entity.Profile
 import com.example.vknewsclient.domain.entity.StatisticItem
 import com.example.vknewsclient.domain.entity.StatisticType
 import java.text.SimpleDateFormat
@@ -12,7 +14,24 @@ import java.util.Locale
 import javax.inject.Inject
 import kotlin.math.absoluteValue
 
-class NewsFeedMapper  @Inject constructor() {
+class NewsFeedMapper @Inject constructor() {
+
+    private val relationMap = mapOf(
+        0 to "не указано",
+        1 to "не женат/не замужем",
+        2 to "есть друг/есть подруга",
+        3 to "помолвлен/помолвлена",
+        4 to "женат/замужем",
+        5 to "всё сложно",
+        6 to "в активном поиске",
+        7 to "влюблён/влюблена",
+        8 to "в гражданском браке",
+    )
+    private val sexMap = mapOf(
+        0 to "не указан",
+        1 to "мужской",
+        2 to "женский",
+    )
 
     fun mapResponseToPosts(responseDto: NewsFeedResponseDto): List<FeedPost> {
         val result = mutableListOf<FeedPost>()
@@ -64,6 +83,18 @@ class NewsFeedMapper  @Inject constructor() {
         }
         return result
     }
+
+    fun mapResponseToProfile(responseDto: ProfileResponseDto) = Profile(
+        profileImageUrl = responseDto.content.profileImageUrl,
+        firstName = responseDto.content.firstName,
+        lastName = responseDto.content.lastName,
+        birthdayDate = responseDto.content.birthdayDate,
+        country = responseDto.content.country.title,
+        city = responseDto.content.city.title,
+        phone = responseDto.content.phone,
+        relation = relationMap[responseDto.content.relation] ?: "не указано",
+        sex = sexMap[responseDto.content.sex] ?: "не указан"
+    )
 
     private fun mapTimestampToDate(timestamp: Long): String {
         val date = Date(timestamp)
